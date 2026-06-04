@@ -17,7 +17,7 @@
             <div>
                 <span class="bg-emerald-500 text-slate-950 text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">WYD 2027 Seoul</span>
                 <h1 class="text-3xl font-bold mt-2 text-emerald-400">Back to Our Memories</h1>
-                <p class="text-slate-400 text-sm mt-1">오징어 게임 테마 한국 전통 놀이 AI 팀 매칭 알고리즘 (V1)</p>
+                <p class="text-slate-400 text-sm mt-1">오징어 게임 테마 한국 전통 놀이 AI 팀 매칭 알고리즘 (V1.2)</p>
             </div>
             <div class="text-right">
                 <span class="text-xs text-slate-400 block">프로젝트 팀</span>
@@ -32,15 +32,26 @@
                 <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-xl">
                     <h2 class="text-lg font-bold mb-3 flex items-center text-emerald-400">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                        1. 참가자 데이터 연동
+                        1. 구글 폼 데이터 연동
                     </h2>
-                    <p class="text-xs text-slate-400 mb-4 font-light leading-relaxed">
-                        참가자들이 구글 독스나 스프레드시트에 입력한 표 데이터를 아래에 붙여넣어 주세요. (기본 샘플 데이터가 입력되어 있습니다)
+                    <p class="text-xs text-slate-400 mb-2 font-light leading-relaxed">
+                        참가자들은 아래 설문지를 통해 정보를 입력합니다.
                     </p>
                     
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSctgHvBZgRzVWQkV1NFg17FqIc7oO4LWGKQ-llHYJkSH2Ns5A/viewform?usp=dialog" target="_blank" class="inline-flex items-center text-xs bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-3 rounded-md transition mb-4 w-full justify-center shadow-md">
+                        📝 참가자 등록 구글 폼 열기 ↗
+                    </a>
+
+                    <p class="text-xs text-slate-400 mb-2 font-light leading-relaxed">
+                        관리자는 구글 폼과 연결된 스프레드시트의 데이터를 복사하여 아래에 붙여넣어 주세요.
+                    </p>
+
+                    <a href="https://docs.google.com/spreadsheets/" target="_blank" class="inline-flex items-center text-xs bg-slate-700 hover:bg-slate-650 text-emerald-400 font-medium py-1.5 px-3 rounded border border-slate-650 transition mb-4 w-full justify-center">
+                        📊 응답 스프레드시트 확인하기 ↗
+                    </a>
+                    
                     <div class="space-y-2">
-                        <label class="block text-xs text-slate-400 font-medium">구글 시트 데이터 입력 (이름 / 국적 / 언어 / 성별 / 나이 / 성향)</label>
-                        <textarea id="csvDataInput" rows="8" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-xs font-mono text-slate-300 focus:outline-none focus:border-emerald-500 leading-normal" placeholder="이름,국적,언어,성별,나이,성향 순으로 입력"></textarea>
+                        <textarea id="csvDataInput" rows="6" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-xs font-mono text-slate-300 focus:outline-none focus:border-emerald-500 leading-normal" placeholder="스프레드시트에서 [타임스탬프] 열을 제외한 [이름, 국적, 언어, 성별, 나이, 성향] 영역을 복사해서 붙여넣으세요."></textarea>
                     </div>
                     
                     <div class="mt-3 flex justify-between items-center text-xs">
@@ -101,38 +112,37 @@
     </div>
 
     <script>
-        // 기본 초기 가상 데이터 샘플 (구글 시트/독스에서 복사해온 형태)
-        const defaultRawData = `Gyu-min\tKR\tKO, EN\tM\t24\t적극형
-Seo-jin\tKR\tKO\tF\t22\t문화체험형
-John\tUS\tEN\tM\t26\t적극형
-Emily\tGB\tEN\tF\t21\t소극형
-Carlos\tES\tES, EN\tM\t29\t적극형
-Yuki\tJP\tJA\tF\t23\t문화체험형
-Chen\tCN\tZH, EN\tM\t25\t적극형
-Amélie\tFR\tFR, EN\tF\t24\t문화체험형
-Ahmed\tEG\tAR\tM\t28\t소극형
-Mateo\tAR\tES\tM\t20\t적극형
-Sophie\tDE\tDE, EN\tF\t27\t문화체험형
-Sita\tIN\tHI, EN\tF\t23\t적극형
-Giovanni\tIT\tIT\tM\t31\t소극형
-Olga\tPL\tPL, EN\tF\t25\t적극형
-Da-hyun\tKR\tKO, EN\tF\t23\t적극형
-Hye-min\tKR\tKO\tF\t24\t문화체험형
-Na-hyun\tKR\tKO\tF\t22\t소극형
-Ho-jin\tKR\tKO, EN\tM\t25\t적극형
-Gyeon-seong\tKR\tKO\tM\t26\t적극형
-Michael\tUS\tEN\tM\t23\t문화체험형
-Sarah\tAU\tEN\tF\t22\t적극형
-Fatima\tMA\tAR, FR\tF\t26\t소극형
-Lucas\tBR\tPT, EN\tM\t24\t적극형
-Chloe\tCA\tEN, FR\tF\t21\t문화체험형
-Kim\tVN\tVI\tM\t27\t소극형`;
+        // 영어 국적 코드 및 영어 활동 성향을 반영한 글로벌 샘플 데이터 시드
+        const defaultRawData = `Gyu-min\tKR (South Korea)\tKO, EN\tM\t24\tActive Participant
+Seo-jin\tKR (South Korea)\tKO\tF\t22\tCulture Explorer
+John\tUS (United States)\tEN\tM\t26\tActive Participant
+Emily\tGB (United Kingdom)\tEN\tF\t21\tPassive Observer
+Carlos\tES (Spain)\tES, EN\tM\t29\tActive Participant
+Yuki\tJP (Japan)\tJA\tF\t23\tCulture Explorer
+Chen\tCN (China)\tZH, EN\tM\t25\tActive Participant
+Amélie\tFR (France)\tFR, EN\tF\t24\tCulture Explorer
+Ahmed\tEG (Egypt)\tAR\tM\t28\tPassive Observer
+Mateo\tAR (Argentina)\tES\tM\t20\tActive Participant
+Sophie\tDE (Germany)\tDE, EN\tF\t27\tCulture Explorer
+Sita\tIN (India)\tHI, EN\tF\t23\tActive Participant
+Giovanni\tIT (Italy)\tIT\tM\t31\tPassive Observer
+Olga\tPL (Poland)\tPL, EN\tF\t25\tActive Participant
+Da-hyun\tKR (South Korea)\tKO, EN\tF\t23\tActive Participant
+Hye-min\tKR (South Korea)\tKO\tF\t24\tCulture Explorer
+Na-hyun\tKR (South Korea)\tKO\tF\t22\tPassive Observer
+Ho-jin\tKR (South Korea)\tKO, EN\tM\t25\tActive Participant
+Gyeon-seong\tKR (South Korea)\tKO\tM\t26\tActive Participant
+Michael\tUS (United States)\tEN\tM\t23\tCulture Explorer
+Sarah\tAU (Australia)\tEN\tF\t22\tActive Participant
+Fatima\tMA (Morocco)\tAR, FR\tF\t26\tPassive Observer
+Lucas\tBR (Brazil)\tPT, EN\tM\t24\tActive Participant
+Chloe\tCA (Canada)\tEN, FR\tF\t21\tCulture Explorer
+Kim\tVN (Vietnam)\tVI\tM\t27\tPassive Observer`;
 
-        // 페이지 최초 로드 시 샘플 채워넣기
+        // 초기 화면 세팅
         document.getElementById('csvDataInput').value = defaultRawData;
         parseAndRefreshStats();
 
-        // 입력창 내용이 바뀔 때마다 상단 통계 실시간 업데이트 반영
         document.getElementById('csvDataInput').addEventListener('input', parseAndRefreshStats);
 
         function resetToSampleData() {
@@ -140,7 +150,7 @@ Kim\tVN\tVI\tM\t27\t소극형`;
             parseAndRefreshStats();
         }
 
-        // 입력받은 데이터를 파싱하여 객체 배열로 변환하는 함수
+        // 구글 폼 데이터 전용 파싱 함수 (국가 코드 앞 2글자 자동 정제 기능 탑재)
         function getParsedParticipants() {
             const rawText = document.getElementById('csvDataInput').value.trim();
             if (!rawText) return [];
@@ -151,17 +161,20 @@ Kim\tVN\tVI\tM\t27\t소극형`;
             lines.forEach((line, index) => {
                 if (!line.trim()) return;
                 
-                // 구글 시트에서 복사하면 탭(\t)으로 구분되고, 직접 쓰면 콤마(,)로 구분될 수 있으므로 정규식 통합 예외처리
                 const tokens = line.split(/\t|,/);
                 if (tokens.length >= 5) {
+                    // "KR (South Korea)" 등에서 앞의 2자리 국가코드만 깔끔하게 추출
+                    let rawCountry = tokens[1]?.trim() || "??";
+                    let cleanCountry = rawCountry.substring(0, 2).toUpperCase(); 
+
                     list.push({
                         id: index + 1,
                         name: tokens[0]?.trim() || "Unknown",
-                        country: tokens[1]?.trim() || "??",
+                        country: cleanCountry, 
                         lang: tokens[2]?.trim() || "EN",
                         gender: tokens[3]?.trim() || "M",
                         age: parseInt(tokens[4]?.trim()) || 20,
-                        type: tokens[5]?.trim() || "문화체험형"
+                        type: tokens[5]?.trim() || "Culture Explorer"
                     });
                 }
             });
@@ -183,15 +196,14 @@ Kim\tVN\tVI\tM\t27\t소극형`;
             }
         }
 
-        // 꿀조합 다국적 AI 팀 매칭 핵심 실행 제어 알고리즘
+        // 핵심 매칭 구동 엔진
         function runMatchingWithCustomData() {
             const pool = getParsedParticipants();
             if (pool.length === 0) {
-                alert("연동된 입력창에 참가자 데이터가 없습니다. 구글 독스/시트 내용을 붙여넣어 주세요.");
+                alert("입력창에 참가자 데이터가 없습니다. 스프레드시트 내용을 붙여넣어 주세요.");
                 return;
             }
 
-            // 사용자 지정 자유 변경 팀 개수 파싱
             let teamCount = parseInt(document.getElementById('teamCountInput').value);
             if (isNaN(teamCount) || teamCount < 1) {
                 alert("팀 개수를 1개 이상 입력해주세요.");
@@ -203,16 +215,13 @@ Kim\tVN\tVI\tM\t27\t소극형`;
                 alert(`설정한 팀 수가 참가자 수보다 많아 최대치인 ${teamCount}개로 자동 조정합니다.`);
             }
 
-            // 빈 팀 프레임 초기 생성 구조 생성
             let teams = Array.from({ length: teamCount }, (_, i) => ({
                 id: i + 1,
                 members: []
             }));
 
-            // 완전 무작위 셔플을 통해 편향 방지 시드 확보
             let shuffledPool = [...pool].sort(() => Math.random() - 0.5);
 
-            // 매칭 제약 조건을 고려한 그리디 다차원 가중치 연산 배치 진행
             shuffledPool.forEach(participant => {
                 let bestTeam = null;
                 let minScore = Infinity;
@@ -230,27 +239,26 @@ Kim\tVN\tVI\tM\t27\t소극형`;
                 }
             });
 
-            // 화면 가시화 연동 렌더링 호출
             renderTeams(teams);
         }
 
-        // 다차원 팀 균형도 채점식 (낮을 수록 이상적인 팀 배치 조합)
+        // 글로벌 제약 조건 가중치 연산 점수 계산식
         function calculateTeamImbalanceScore(team, user) {
-            let score = team.members.length * 10; // 제약1: 팀원수 균등 분배 가중치
+            let score = team.members.length * 10; 
 
-            // 제약2: 국적 중복 패널티 부여 (같은 국적이 많을수록 불이익 배제)
+            // 제약1: 국적 중복성 최소화 배제 조건
             const sameCountryCount = team.members.filter(m => m.country === user.country).length;
             score += sameCountryCount * 18;
 
-            // 젯약3: 성별 비율 조정 패널티
+            // 제약2: 성별 균등 조정
             const sameGenderCount = team.members.filter(m => m.gender === user.gender).length;
             score += sameGenderCount * 5;
 
-            // 제약4: MBTI/성향 동일 분류 편향 패널티
+            // 제약3: 영어 및 글로벌 성향 편향 방지 (수정됨)
             const sameTypeCount = team.members.filter(m => m.type === user.type).length;
             score += sameTypeCount * 4;
 
-            // 제약5: 소통 보강 가중치 (팀에 영어 가능가 없는데 본인이 가능 시 우대 점수)
+            // 제약4: 최소 소통 장벽 완화 (팀 내 영어 사용 가능자 유무 체크)
             const hasEnglishSpeaker = team.members.some(m => m.lang.includes("EN"));
             if (!hasEnglishSpeaker && user.lang.includes("EN")) {
                 score -= 8; 
@@ -259,7 +267,7 @@ Kim\tVN\tVI\tM\t27\t소극형`;
             return score;
         }
 
-        // 최종 매칭 결과를 유려한 카드 UI 리스트로 전환 출력
+        // 최종 매칭 대시보드 뷰어 출력 함수
         function renderTeams(teams) {
             const container = document.getElementById('teamsContainer');
             container.innerHTML = ''; 
@@ -277,7 +285,7 @@ Kim\tVN\tVI\tM\t27\t소극형`;
                         <td class="py-2 text-slate-400">${m.lang}</td>
                         <td class="py-2 text-center text-slate-300">${m.gender}/${m.age}</td>
                         <td class="py-2 text-right">
-                            <span class="${m.type === '적극형' ? 'text-amber-400' : m.type === '소극형' ? 'text-blue-400' : 'text-emerald-400'}">
+                            <span class="${m.type === 'Active Participant' ? 'text-amber-400' : m.type === 'Passive Observer' ? 'text-blue-400' : 'text-emerald-400'}">
                                 ${m.type}
                             </span>
                         </td>
