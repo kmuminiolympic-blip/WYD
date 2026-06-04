@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2027 WYD 스포츠 마케팅 - AI 팀 매칭 시뮬레이터</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap');
+        body { font-family: 'Noto Sans KR', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen p-6">
+
+    <div class="max-w-6xl mx-auto">
+        <header class="border-b border-slate-700 pb-6 mb-8 text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <span class="bg-emerald-500 text-slate-950 text-xs font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">WYD 2027 Seoul</span>
+                <h1 class="text-3xl font-bold mt-2 text-emerald-400">Back to Our Memories</h1>
+                <p class="text-slate-400 text-sm mt-1">오징어 게임 테마 한국 전통 놀이 AI 팀 매칭 알고리즘 (V0)</p>
+            </div>
+            <div class="text-right">
+                <span class="text-xs text-slate-400 block">프로젝트 팀</span>
+                <span class="text-lg font-semibold text-slate-200">끝내주조</span>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <div class="lg:col-span-1 space-y-6">
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 shadow-xl">
+                    <h2 class="text-xl font-bold mb-4 flex items-center text-emerald-400">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                        매칭 설정 (Constraints)
+                    </h2>
+                    
+                    <div class="space-y-4 text-sm text-slate-300">
+                        <div class="flex justify-between items-center p-2.5 bg-slate-750 rounded border border-slate-700">
+                            <span>🌍 국적 다양성</span>
+                            <span class="text-xs bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded">팀당 최소 3개국</span>
+                        </div>
+                        <div class="flex justify-between items-center p-2.5 bg-slate-750 rounded border border-slate-700">
+                            <span>💬 언어 장벽 완화</span>
+                            <span class="text-xs bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded">공통어(EN) 1명 필수</span>
+                        </div>
+                        <div class="flex justify-between items-center p-2.5 bg-slate-750 rounded border border-slate-700">
+                            <span>⚖️ 성별/연령 균형</span>
+                            <span class="text-xs bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded">균등 분배</span>
+                        </div>
+                        <div class="flex justify-between items-center p-2.5 bg-slate-750 rounded border border-slate-700">
+                            <span>⚡ 활동 성향 분산</span>
+                            <span class="text-xs bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded">적극/소극 혼합</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-6">
+                        <label class="block text-sm font-medium text-slate-400 mb-2">목표 팀 개수 설정</label>
+                        <select id="teamCount" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-slate-200 focus:outline-none focus:border-emerald-500">
+                            <option value="4">4개 팀 생성 (팀당 약 6명)</option>
+                            <option value="5" selected>5개 팀 생성 (팀당 약 5명)</option>
+                            <option value="6">6개 팀 생성 (팀당 약 4명)</option>
+                        </select>
+                    </div>
+
+                    <button onclick="runMatchingAlgorithm()" class="w-full mt-6 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-3 px-4 rounded-lg transition duration-200 shadow-lg cursor-pointer">
+                        AI 매칭 알고리즘 가동 🚀
+                    </button>
+                </div>
+
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">대기열 현황</h3>
+                    <div class="grid grid-cols-2 gap-4 text-center">
+                        <div class="bg-slate-900 p-3 rounded border border-slate-700">
+                            <span class="text-xs text-slate-400 block">총 참가 인원</span>
+                            <span id="totalParticipants" class="text-2xl font-bold text-emerald-400">0</span>
+                        </div>
+                        <div class="bg-slate-900 p-3 rounded border border-slate-700">
+                            <span class="text-xs text-slate-400 block">참가 국적 수</span>
+                            <span id="totalCountries" class="text-2xl font-bold text-cyan-400">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-2 space-y-6">
+                <h2 class="text-2xl font-bold text-slate-200 flex items-center">
+                    <span class="inline-block w-3 h-6 bg-emerald-500 rounded mr-3"></span>
+                    실시간 생성된 매칭 결과
+                </h2>
+                
+                <div id="teamsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="col-span-2 text-center py-20 bg-slate-800/50 rounded-xl border border-dashed border-slate-700 text-slate-500">
+                        왼쪽의 'AI 매칭 알고리즘 가동' 버튼을 누르면 다국적 팀 구성 결과가 여기에 출력됩니다.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // 1. WYD 가상 참가자 데이터 25명 선언 (Mock Data)
+        const participants = [
+            { id: 1, name: "Gyu-min", country: "KR", lang: "KO, EN", gender: "M", age: 24, type: "적극형" },
+            { id: 2, name: "Seo-jin", country: "KR", lang: "KO", gender: "F", age: 22, type: "문화체험형" },
+            { id: 3, name: "John", country: "US", lang: "EN", gender: "M", age: 26, type: "적극형" },
+            { id: 4, name: "Emily", country: "GB", lang: "EN", gender: "F", age: 21, type: "소극형" },
+            { id: 5, name: "Carlos", country: "ES", lang: "ES, EN", gender: "M", age: 29, type: "적극형" },
+            { id: 6, name: "Yuki", country: "JP", lang: "JA", gender: "F", age: 23, type: "문화체험형" },
+            { id: 7, name: "Chen", country: "CN", lang: "ZH, EN", gender: "M", age: 25, type: "적극형" },
+            { id: 8, name: "Amélie", country: "FR", lang: "FR, EN", gender: "F", age: 24, type: "문화체험형" },
+            { id: 9, name: "Ahmed", country: "EG", lang: "AR", gender: "M", age: 28, type: "소극형" },
+            { id: 10, name: "Mateo", country: "AR", lang: "ES", gender: "M", age: 20, type: "적극형" },
+            { id: 11, name: "Sophie", country: "DE", lang: "DE, EN", gender: "F", age: 27, type: "문화체험형" },
+            { id: 12, name: "Sita", country: "IN", lang: "HI, EN", gender: "F", age: 23, type: "적극형" },
+            { id: 13, name: "Giovanni", country: "IT", lang: "IT", gender: "M", age: 31, type: "소극형" },
+            { id: 14, name: "Olga", country: "PL", lang: "PL, EN", gender: "F", age: 25, type: "적극형" },
+            { id: 15, name: "Da-hyun", country: "KR", lang: "KO, EN", gender: "F", age: 23, type: "적극형" },
+            { id: 16, name: "Hye-min", country: "KR", lang: "KO", gender: "F", age: 24, type: "문화체험형" },
+            { id: 17, name: "Na-hyun", country: "KR", lang: "KO", gender: "F", age: 22, type: "소극형" },
+            { id: 18, name: "Ho-jin", country: "KR", lang: "KO, EN", gender: "M", age: 25, type: "적극형" },
+            { id: 19, name: "Gyeon-seong", country: "KR", lang: "KO", gender: "M", age: 26, type: "적극형" },
+            { id: 20, name: "Michael", country: "US", lang: "EN", gender: "M", age: 23, type: "문화체험형" },
+            { id: 21, name: "Sarah", country: "AU", lang: "EN", gender: "F", age: 22, type: "적극형" },
+            { id: 22, name: "Fatima", country: "MA", lang: "AR, FR", gender: "F", age: 26, type: "소극형" },
+            { id: 23, name: "Lucas", country: "BR", lang: "PT, EN", gender: "M", age: 24, type: "적극형" },
+            { id: 24, name: "Chloe", country: "CA", lang: "EN, FR", gender: "F", age: 21, type: "문화체험형" },
+            { id: 25, name: "Kim", country: "VN", lang: "VI", gender: "M", age: 27, type: "소극형" }
+        ];
+
+        // 대기열 스탯 초기화 가동
+        document.getElementById('totalParticipants').innerText = participants.length;
+        const uniqueCountries = [...new Set(participants.map(p => p.country))].length;
+        document.getElementById('totalCountries').innerText = uniqueCountries;
+
+        // 2. 가중치 기반 다국적 팀 매칭 알고리즘 (Greedy & Scoring)
+        function runMatchingAlgorithm() {
+            const teamCount = parseInt(document.getElementById('teamCount').value);
+            
+            // 빈 팀 배열 생성
+            let teams = Array.from({ length: teamCount }, (_, i) => ({
+                id: i + 1,
+                members: []
+            }));
+
+            // 원본 데이터 보호를 위해 참가자 명단 셔플(무작위성 확보)
+            let pool = [...participants].sort(() => Math.random() - 0.5);
+
+            // 우선 순위 분배: 균등한 배치를 위해 순차적으로 돌며 각 팀의 '적합도 점수'가 가장 높은 곳에 사람을 넣음
+            pool.forEach(participant => {
+                let bestTeam = null;
+                let minScore = Infinity;
+
+                // 각 팀을 검사하며 현재 참가자가 들어갔을 때 조건 편차가 가장 적은(가장 점수가 낮은/안정적인) 팀 탐색
+                teams.forEach(team => {
+                    let score = calculateTeamImbalanceScore(team, participant);
+                    if (score < minScore) {
+                        minScore = score;
+                        bestTeam = team;
+                    }
+                });
+
+                if (bestTeam) {
+                    bestTeam.members.push(participant);
+                }
+            });
+
+            // 화면에 렌더링
+            renderTeams(teams);
+        }
+
+        // 3. 팀 불균형도 계산 함수 (낮을수록 해당 팀에 들어가는 것이 균형적임을 의미)
+        function calculateTeamImbalanceScore(team, user) {
+            let score = team.members.length * 10; // 1. 팀원 수 평등화 가중치
+
+            // 2. 국적 중복성 패널티
+            const sameCountryCount = team.members.filter(m => m.country === user.country).length;
+            score += sameCountryCount * 15;
+
+            // 3. 성별 불균형 패널티
+            const sameGenderCount = team.members.filter(m => m.gender === user.gender).length;
+            score += sameGenderCount * 5;
+
+            // 4. 성향 중복 패널티
+            const sameTypeCount = team.members.filter(m => m.type === user.type).length;
+            score += sameTypeCount * 5;
+
+            // 5. 언어 가중치 (영어 가능자가 팀에 한 명도 없는데 본인이 영어가 가능하다면 어드밴티지 차감)
+            const hasEnglishSpeaker = team.members.some(m => m.lang.includes("EN"));
+            if (!hasEnglishSpeaker && user.lang.includes("EN")) {
+                score -= 8; 
+            }
+
+            return score;
+        }
+
+        // 4. 결과를 HTML 카드 구조로 화면에 뿌려주는 함수
+        function renderTeams(teams) {
+            const container = document.getElementById('teamsContainer');
+            container.innerHTML = ''; // 초기화
+
+            teams.forEach(team => {
+                // 팀 통계 계산
+                const countries = [...new Set(team.members.map(m => m.country))];
+                const engCount = team.members.filter(m => m.lang.includes("EN")).length;
+                const activeCount = team.members.filter(m => m.type === "적극형").length;
+
+                let memberRowsHTML = team.members.map(m => `
+                    <tr class="border-b border-slate-700/50 text-xs">
+                        <td class="py-2 font-medium text-slate-200">${m.name}</td>
+                        <td class="py-2">
+                            <span class="bg-slate-700 px-1.5 py-0.5 rounded text-cyan-300 font-mono">${m.country}</span>
+                        </td>
+                        <td class="py-2 text-slate-400">${m.lang}</td>
+                        <td class="py-2 text-center text-slate-300">${m.gender}/${m.age}</td>
+                        <td class="py-2 text-right">
+                            <span class="${m.type === '적극형' ? 'text-amber-400' : m.type === '소극형' ? 'text-blue-400' : 'text-emerald-400'}">
+                                ${m.type}
+                            </span>
+                        </td>
+                    </tr>
+                `).join('');
+
+                const teamCard = `
+                    <div class="bg-slate-800 rounded-xl border border-slate-700 p-5 shadow-lg transition transform hover:-translate-y-1 hover:border-emerald-500/50">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-bold text-emerald-400 flex items-center">
+                                <span class="bg-emerald-500 text-slate-950 text-xs px-2 py-0.5 rounded-md mr-2">TEAM ${team.id}</span>
+                                참가자 (${team.members.length}명)
+                            </h3>
+                            <div class="flex gap-1.5 text-[10px]">
+                                <span class="bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 px-1.5 py-0.5 rounded">🌐 국적 ${countries.length}개</span>
+                                <span class="bg-amber-500/10 text-amber-400 border border-amber-500/20 px-1.5 py-0.5 rounded">🗣️ 영어 ${engCount}명</span>
+                            </div>
+                        </div>
+
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead>
+                                    <tr class="text-[11px] text-slate-500 uppercase tracking-wider border-b border-slate-700">
+                                        <th class="pb-2">이름</th>
+                                        <th class="pb-2">국적</th>
+                                        <th class="pb-2">언어</th>
+                                        <th class="pb-2 text-center">성별/나이</th>
+                                        <th class="pb-2 text-right">성향</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${memberRowsHTML}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += teamCard;
+            });
+        }
+    </script>
+</body>
+</html>
